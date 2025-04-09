@@ -33,7 +33,7 @@ Make sure you have the following `.m` files saved in the **same folder**:
 - `inteprior.m`  
 - `combat.m`
 
-You can find these files in the [ComBatHarmonization repository here](https://github.com/Jfortin1/ComBatHarmonization/tree/master/Matlab/scripts).
+You can find these files [here](https://github.com/Jfortin1/ComBatHarmonization/tree/master/Matlab/scripts).
 
 Place all the `.m` files into a single directory on your computer (e.g., `~/Documents/MATLAB/ComBat/`).
 
