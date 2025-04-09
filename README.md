@@ -43,8 +43,9 @@ Place all the `.m` files into a single directory on your computer (e.g., `~/Docu
 
 In your MATLAB command window or in a script, run:
 
-```matlab
+```
 addpath('path/to/the/scripts/folder'); 
+```
 
 Replace 'path/to/the/scripts/folder' with the actual path to the folder containing the .m files.
 
@@ -52,5 +53,6 @@ Replace 'path/to/the/scripts/folder' with the actual path to the folder containi
 
 If you want MATLAB to remember this path across sessions, use:
 
-```matlab
+```
 savepath;
+```
