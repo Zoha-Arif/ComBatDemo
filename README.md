@@ -14,11 +14,12 @@ This repository provides a simple demonstration of how to use ComBat to harmoniz
 
 ## 🧠 Core Method Reference
 
+For background information, you can access the paper on DTI data harmonization here:  
+🔗 [Science Direct](https://www.sciencedirect.com/science/article/pii/S1053811917306948?via%3Dihub#!)
+
 This demo uses the Matlab implementation from the official ComBat Harmonization repository:  
 🔗 [Jfortin1/ComBatHarmonization](https://github.com/Jfortin1/ComBatHarmonization)
 
-For background information, you can access the paper on DTI data harmonization here:  
-🔗 <https://www.sciencedirect.com/science/article/pii/S1053811917306948?via%3Dihub#!>
 ---
 
 ## 🚀 Getting Started
