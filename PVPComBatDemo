@@ -1,0 +1,80 @@
+% addpath('path_to_where_you_saved\');
+addpath('C:\Users\ariff\OneDrive\Desktop\ComBatDepend');
+
+% Harmonizing White Matter Tract-Based FA Values in the PVP Using ComBat 
+% ========================================================================
+
+% Suppose you're analyzing fractional anisotropy (FA) values from 
+% three key PVP tracts across participants aged 5–21. 
+% Your data come from two different datasets: PING and HBN, 
+% which used different scanners and acquisition protocols.
+
+% Each participant has:
+% 1. Tract profiles (mean FA values across nodes) for the MDLF-ang,
+% MFL-spl, pArc, TP-spl. 
+% 2. Metadata including age, sex, and scanner/site.
+
+% ================== Using ComBat for Harmonization ==================
+
+% You can use ComBat to remove site-related variability from the FA values 
+% while preserving age-related developmental trends. Here's how:
+
+% Since both PING and HBN contain data from multiple sites/scanners, 
+% ComBat should use a nested site variable like "siteID" or "scannerID" for 
+% harmonization—not just "PING vs HBN." This ensures you're removing scanner effects within each dataset as well as between datasets.
+
+% Your model:
+% 1. Input features: Mean FA values from each tract
+% 2. Biological covariates: Age, sex, handedness (optional)
+% 3. Batch variable: siteID (e.g., HBN_CBIC, PING_UCD, etc.)
+
+% ComBat will adjust the FA values for each tract by:
+% 1. Shifting and scaling the data based on scanner-related patterns,
+% 2. Pooling information across nodes or tracts to improve estimation,
+% 3. Preserving age effects by conditioning on the age variable during adjustment.
+
+% ================== After Using ComBat for Harmonization ==================
+% After running ComBat:
+% 1. FA values from PING and HBN are now on a comparable scale,
+% 2. Age-related increases in FA along the PVP are still present, 
+%    but scanner noise is reduced,
+% 3. You have increased statistical power to detect developmental 
+%    trajectories across all tracts,
+% 4. When testing for age × tract interactions or non-linear growth curves 
+%    (e.g., exponential fits), your models are no longer biased by dataset.
+
+% Simulate PVP project data for ComBat harmonization
+% Assuming 4 tracts (features), 100 subjects, 5 sites
+
+% ================== Code ==================
+
+% Set random seed for reproducibility
+rng(123);
+
+n = 100;           % number of subjects
+p = 4;             % number of tracts MDLF-ang, MDLF-spl, pArc, TP-spl. 
+n_sites = 5;       % number of sites
+
+% Simulate tract FA values with site effects
+Y = randn(p, n) + repmat(randn(p, n_sites), 1, n/n_sites); % FA matrix (p x n)
+
+% Simulate covariates
+age = 8 + 12*rand(1, n);           % ages between 8 and 20
+sex = randi([0, 1], 1, n);         % 0 = female, 1 = male
+site = repelem(1:n_sites, n/n_sites);  % site labels
+
+% Design matrix for biological covariates
+X = [ones(n, 1), age', sex'];  % intercept + age + sex
+
+% Call ComBat
+Y_combat = combat(Y, site, X, 1);
+
+% Plot before vs. after harmonization
+figure;
+for i = 1:p
+    subplot(2,2,i);
+    scatter(1:n, Y(i,:), 20, site, 'filled'); hold on;
+    scatter(1:n, Y_combat(i,:), 20, site, 'd');
+    title(['Tract ', num2str(i)]);
+    legend('Raw', 'ComBat');
+end
